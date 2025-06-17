@@ -20,7 +20,20 @@ export function RegisterForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    alert(`Email: ${form.email}\nNome: ${form.nome}\nSenha: ${form.senha}`);
+    console.log("Formulário enviado:", form);
+    fetch(`${import.meta.env.VITE_API_URL}/users`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: form.nome,
+        email: form.email,
+        password: form.senha,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
+    setForm({ email: "", nome: "", senha: "" }); // Limpa o formulário após o envio
   };
 
   return (
