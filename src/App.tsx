@@ -1,8 +1,19 @@
-import { Typography } from "@mui/material";
+import axios from "axios";
+import { useEffect } from "react";
+import { Router } from "./Routes/Route";
+
 export function App() {
-  return (
-    <Typography variant="body1" color="initial">
-      Olá do frontend
-    </Typography>
-  );
+  
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/")
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+      });
+  }, []);
+
+  return <Router />;
 }
