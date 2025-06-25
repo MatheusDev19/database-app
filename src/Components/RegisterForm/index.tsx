@@ -1,75 +1,77 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { TextField, Button, Box } from "@mui/material";
+import { TextFieldForm } from "../../Utils/Components/TextFieldForm";
+import { ButtomSubmit } from "../../Utils/Components/ButtomSubmit";
 import { UserService } from "../../Services/User.service";
-
-type FormData = {
-  email: string;
-  nome: string;
-  senha: string;
-};
+import { Box } from "@mui/material";
+import { useState } from "react";
+// import styles from "./register-form.module.css";
 
 export function RegisterForm() {
-  const [form, setForm] = useState<FormData>({
-    email: "",
-    nome: "",
-    senha: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    UserService.create({
-      id: crypto.randomUUID(),
-      name: form.nome,
-      email: form.email,
-      password: form.senha,
-    })
-      .then(() => {
-        alert("Usuário cadastrado com sucesso!");
-        setForm({ email: "", nome: "", senha: "" });
-      })
-      .catch((error) => {
-        console.error("Erro ao cadastrar usuário:", error);
-        alert("Erro ao cadastrar usuário. Tente novamente.");
-      });
-  }
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await UserService.register({ name, email, password });
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
 
   return (
     <Box
+      className="form"
       component="form"
+      textAlign={"center"}
       onSubmit={handleSubmit}
-      sx={{ display: "flex", flexDirection: "column", gap: 2, width: 300 }}
     >
-      <TextField
+      <TextFieldForm
+        id="name"
+        label="name"
+        name="name"
+        autoFocus
+        value={name}
+        onChange={handleNameChange}
+      />
+
+      <TextFieldForm
+        id="email"
         label="Email"
-        type="email"
         name="email"
-        value={form.email}
-        onChange={handleChange}
-        required
+        autoFocus
+        value={email}
+        onChange={handleEmailChange}
       />
-      <TextField
-        label="Nome"
-        type="text"
-        name="nome"
-        value={form.nome}
-        onChange={handleChange}
-        required
-      />
-      <TextField
-        label="Senha"
+
+      <TextFieldForm
+        id="password"
+        label="password"
+        name="password"
         type="password"
-        name="senha"
-        value={form.senha}
-        onChange={handleChange}
-        required
+        value={password}
+        onChange={handlePasswordChange}
       />
-      <Button type="submit" variant="contained" color="primary">
-        Enviar
-      </Button>
+
+      <ButtomSubmit
+        type="submit"
+        variant="contained"
+        fullWidth
+        disabled={!email || !password || !name}
+      >
+        Register
+      </ButtomSubmit>
     </Box>
   );
 }

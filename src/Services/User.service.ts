@@ -8,7 +8,7 @@ export const UserService = {
         return response.data
     },
 
-    async create(user: User): Promise<User> {
+    async register(user: User): Promise<User> {
         const response = await api.post<User>('/users', user)
         return response.data
     },
