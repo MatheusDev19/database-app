@@ -6,6 +6,7 @@ interface ButtomSubmitProps {
     type?: 'submit' | 'button' | 'reset';
     onClick?: () => void;
     disabled?: boolean;
+    label: string;
 }
 
 export const ButtomSubmit: React.FC<ButtomSubmitProps> = ({
@@ -14,6 +15,7 @@ export const ButtomSubmit: React.FC<ButtomSubmitProps> = ({
     type = 'submit',
     onClick,
     disabled = false,
+    label,
 }) => {
     return (
         <Button
@@ -26,7 +28,7 @@ export const ButtomSubmit: React.FC<ButtomSubmitProps> = ({
                 backgroundColor: '#bb1626',
             }}
         >
-            Entrar
+            {label}
         </Button>
     );
 };
